@@ -1,4 +1,11 @@
-#include <vector>
+#include "VectorArithmetic.h"
+
+std::vector<double> vector(Node p_A, Node p_B)
+{
+	return std::vector<double>({ p_B.m_X - p_A.m_X,
+							p_B.m_Y - p_A.m_Y,
+							p_B.m_Z - p_A.m_Z });
+}
 
 double scalarProduct(std::vector<double> p_Vec1, std::vector<double> p_Vec2)
 {

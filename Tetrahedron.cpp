@@ -1,19 +1,30 @@
+#pragma once
 #include "Tetrahedron.h"
 
 Tetrahedron::Tetrahedron() 
 {
+	m_Nodes.resize(4);
 	m_Nodes[0] = Node();
 	m_Nodes[1] = Node();
 	m_Nodes[2] = Node();
 	m_Nodes[3] = Node();
 }
 
-Tetrahedron::Tetrahedron(const Node& p_A, const Node& p_B, const Node& p_C, const Node& p_D)
+Tetrahedron::Tetrahedron(Node p_A, Node p_B, Node p_C, Node p_D)
 {
+	m_Nodes.resize(4);
 	m_Nodes[0] = p_A;
 	m_Nodes[1] = p_B;
 	m_Nodes[2] = p_C;
 	m_Nodes[3] = p_D;
+	m_Edges.push_back(Edge(p_A.m_ID, p_B.m_ID));
+	m_Edges.push_back(Edge(p_B.m_ID, p_C.m_ID));
+	m_Edges.push_back(Edge(p_C.m_ID, p_D.m_ID));
+	m_Edges.push_back(Edge(p_A.m_ID, p_D.m_ID));
+	m_FiniteElements.push_back(FiniteElement(std::vector<unsigned>{p_A.m_ID, p_B.m_ID, p_C.m_ID}));
+	m_FiniteElements.push_back(FiniteElement(std::vector<unsigned>{p_A.m_ID, p_B.m_ID, p_D.m_ID}));
+	m_FiniteElements.push_back(FiniteElement(std::vector<unsigned>{p_B.m_ID, p_C.m_ID, p_D.m_ID}));
+	m_FiniteElements.push_back(FiniteElement(std::vector<unsigned>{p_A.m_ID, p_C.m_ID, p_D.m_ID}));
 }
 
 double det3(double a11, double a12, double a13,
@@ -28,8 +39,7 @@ double Tetrahedron::volume() const
 	Node B = m_Nodes[1];
 	Node C = m_Nodes[2];
 	Node D = m_Nodes[3];
-
-	return 1 / 6 * abs(mixedProduct(vector(A, B), vector(A, C), vector(A, D)));
+	return abs(mixedProduct(vector(A, B), vector(A, C), vector(A, D))) / 6;
 }
 
 std::vector<Node> Tetrahedron::getNodes()
@@ -40,6 +50,11 @@ std::vector<Node> Tetrahedron::getNodes()
 std::vector<Edge> Tetrahedron::getEdges() 
 {
 	return m_Edges;
+}
+
+std::vector<FiniteElement> Tetrahedron::getFiniteElements()
+{
+	return m_FiniteElements;
 }
 
 //b1-a1	  b2-a2	  b3-a3 | b^2 - a^2
@@ -96,7 +111,7 @@ double Tetrahedron::getCircumRadius() const
 		+ (O.m_Z - m_Nodes[0].m_Z)*(O.m_Z - m_Nodes[0].m_Z);
 }
 
-bool Tetrahedron::tetrahedronInclusionTest(const Node& p_Point) const
+bool Tetrahedron::tetrahedronInclusionTest(Node& p_Point) const
 {
 	double V = volume();
 	Tetrahedron T1(p_Point, m_Nodes[1], m_Nodes[2], m_Nodes[3]);
@@ -111,6 +126,12 @@ bool Tetrahedron::tetrahedronInclusionTest(const Node& p_Point) const
 		return true;
 	else
 		return false;
+}
+
+std::ostream& operator<<(std::ostream& p_Out, Tetrahedron& p_Tetrahedron)
+{
+	p_Out << p_Tetrahedron.m_Nodes[0].m_ID << " " << p_Tetrahedron.m_Nodes[1].m_ID << " " << p_Tetrahedron.m_Nodes[2].m_ID << " " << p_Tetrahedron.m_Nodes[3].m_ID;
+	return p_Out;
 }
 
 Tetrahedron::~Tetrahedron()

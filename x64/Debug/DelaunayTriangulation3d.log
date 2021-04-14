@@ -1,3 +1,6 @@
-﻿  Triangulation.cpp
-c:\users\shakhmanaev\source\repos\delaunaytriangulation3d\delaunaytriangulation3d\triangulation.cpp(35): error C3867: "Tetrahedron::getCircumCentre": нестандартный синтаксис; используйте "&", чтобы создать указатель на член
-c:\users\shakhmanaev\source\repos\delaunaytriangulation3d\delaunaytriangulation3d\triangulation.cpp(35): error C3867: "Tetrahedron::getCircumRadius": нестандартный синтаксис; используйте "&", чтобы создать указатель на член
+﻿  Context.cpp
+C:\Users\shakhmanaev\source\repos\DelaunayTriangulation3d\DelaunayTriangulation3d\Context.cpp(16,29): warning C4150: удаление указателя на неполный тип "GamePad"; деструктор не вызван
+C:\Users\shakhmanaev\source\repos\DelaunayTriangulation3d\DelaunayTriangulation3d\Context.h(11): message : см. объявление "GamePad"
+C:\Users\shakhmanaev\source\repos\DelaunayTriangulation3d\DelaunayTriangulation3d\Context.cpp(28,27): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\shakhmanaev\source\repos\DelaunayTriangulation3d\DelaunayTriangulation3d\Context.cpp(85,41): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  DelaunayTriangulation3d.vcxproj -> C:\Users\shakhmanaev\source\repos\DelaunayTriangulation3d\x64\Debug\DelaunayTriangulation3d.exe

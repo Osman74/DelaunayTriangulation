@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <iterator>
 struct Node {
 	unsigned m_ID;
@@ -12,10 +13,23 @@ struct Node {
 	Node(int ID, double x, double y, double z) :
 		m_ID(ID), m_X(x), m_Y(y), m_Z(z) {}
 
+	double& x() { return m_X; }
+	double& y() { return m_Y; }
+	double& z() { return m_Z; }
+
 	bool operator<(const Node& p_node) const {
 		return m_ID < p_node.m_ID;
 	}
-	friend std::ostream& operator<<(std::ostream& p_Out, const Node& p_Node) {
+	friend std::ostream& operator<<(
+		std::ostream& p_Out, const Node& p_Node) {
+		p_Out << "ID узла - " << p_Node.m_ID << std::endl;
+		p_Out << "X - " << p_Node.m_X << std::endl;
+		p_Out << "Y - " << p_Node.m_Y << std::endl;
+		p_Out << "Z - " << p_Node.m_Z << std::endl;
+		return p_Out;
+	}
+	friend std::fstream& operator<<(
+		std::fstream& p_Out, const Node& p_Node) {
 		p_Out << "ID узла - " << p_Node.m_ID << std::endl;
 		p_Out << "X - " << p_Node.m_X << std::endl;
 		p_Out << "Y - " << p_Node.m_Y << std::endl;
@@ -29,12 +43,17 @@ struct Edge {
 	unsigned LastNode_ID;
 	unsigned Center_ID;
 
-	Edge(unsigned p_ID1, unsigned p_ID2, unsigned p_ID3) : FirstNode_ID(p_ID1), LastNode_ID(p_ID2), Center_ID(p_ID3) {}
+	Edge(unsigned p_ID1, unsigned p_ID2, unsigned p_ID3 = 0) 
+		: FirstNode_ID(p_ID1),
+		LastNode_ID(p_ID2),
+		Center_ID(p_ID3) {}
 
 	bool operator==(const Edge& right_edge) const {
-		if (right_edge.FirstNode_ID == FirstNode_ID && right_edge.LastNode_ID == LastNode_ID)
+		if (right_edge.FirstNode_ID == FirstNode_ID 
+			&& right_edge.LastNode_ID == LastNode_ID)
 			return true;
-		else if (right_edge.FirstNode_ID == LastNode_ID && right_edge.LastNode_ID == FirstNode_ID)
+		else if (right_edge.FirstNode_ID == LastNode_ID 
+			&& right_edge.LastNode_ID == FirstNode_ID)
 			return true;
 		else return false;
 	}
@@ -50,11 +69,17 @@ struct FiniteElement {
 	unsigned m_ID;
 	unsigned m_IDType;
 	std::vector<unsigned> m_NodeIDs;
+	FiniteElement(std::vector<unsigned> m_IDs)
+	{
+		m_NodeIDs = m_IDs;
+	}
 	friend std::ostream& operator<<(std::ostream& p_Out, const FiniteElement& p_FE) {
 		p_Out << "ID КЭ - " << p_FE.m_ID << std::endl;
 		p_Out << "ID материала - " << p_FE.m_IDType << std::endl;
 		p_Out << "ID узлов КЭ : ";
-		std::copy(p_FE.m_NodeIDs.begin(), p_FE.m_NodeIDs.end(), std::ostream_iterator<int>(p_Out, " "));
+		std::copy(p_FE.m_NodeIDs.begin(),
+			p_FE.m_NodeIDs.end(),
+			std::ostream_iterator<int>(p_Out, " "));
 		p_Out << std::endl;
 		return p_Out;
 	}
@@ -68,7 +93,9 @@ struct SurfaceFiniteElement {
 		p_Out << "ID поверхностного КЭ - " << p_SFE.m_ID << std::endl;
 		p_Out << "ID поверхности - " << p_SFE.m_IDSurface << std::endl;
 		p_Out << "ID узлов поверхностного КЭ : ";
-		std::copy(p_SFE.m_NodeIDs.begin(), p_SFE.m_NodeIDs.end(), std::ostream_iterator<int>(p_Out, " "));
+		std::copy(p_SFE.m_NodeIDs.begin(), 
+			p_SFE.m_NodeIDs.end(), 
+			std::ostream_iterator<int>(p_Out, " "));
 		p_Out << std::endl;
 		return p_Out;
 	}
